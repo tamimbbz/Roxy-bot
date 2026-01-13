@@ -52,7 +52,7 @@ You can deploy **GOAT-BOT-V2** on the following platforms:
 * **🚂 Railway:** Best for easy Node.js hosting.
 
 > [!WARNING]
-> **Privacy Note:** Never share your `appstate.json` publicly on GitHub. Use Environment Variables for security.
+> **Privacy Note:** Never share your `account.txt` publicly on GitHub.
 
 ---
 <p align="center">
