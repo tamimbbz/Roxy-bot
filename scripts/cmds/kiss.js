@@ -1,102 +1,95 @@
-const fs = require("fs-extra");
-const axios = require("axios");
-const Canvas = require("canvas");
-const path = require("path");
-
-const ACCESS_TOKEN = "350685531728|62f8ce9f74b12f84c123cc23437a4a32"; // Facebook App token
+const axios = require('axios');
+const fs = require('fs-extra');
+const path = require('path');
+const { createCanvas, loadImage } = require('canvas');
 
 module.exports = {
-  config: {
-    name: "kiss",
-    aliases: ["kiss"],
-    version: "2.2",
-    author: "Efat fixed by xalman",
-    countDown: 5,
-    role: 0,
-    shortDescription: "Kiss with custom image",
-    longDescription: "Generate a kiss image using @mention, UID, or reply.",
-    category: "funny",
-    guide: "{pn} @mention / {pn} <UID> / reply with {pn}"
-  },
+    config: {
+        name: "kiss",
+        version: "3.5.0",
+        author: "xalman",
+        countDown: 5,
+        role: 0,
+        description: "Kiss someone using mention, reply, or UID",
+        category: "love",
+        guide: { en: "{p}{n} @mention | Reply to a message | {p}{n} [uid]" }
+    },
 
-  onStart: async function ({ api, message, event }) {
-    let mentionedID;
+    onStart: async function ({ api, event, args, usersData }) {
+        const { threadID, messageID, senderID, mentions, type, messageReply } = event;
+        
+        let mentionID;
+        if (type === "message_reply") {
+            mentionID = messageReply.senderID;
+        } else if (Object.keys(mentions).length > 0) {
+            mentionID = Object.keys(mentions)[0];
+        } else if (args[0]) {
+            mentionID = args[0];
+        }
 
-    if (event.messageReply) {
-      mentionedID = event.messageReply.senderID;
+        if (!mentionID) return api.sendMessage("Please mention someone, reply to a message, or provide a UID! 🌧️", threadID, messageID);
+
+        try {
+            const senderInfo = await usersData.get(senderID);
+            const mentionInfo = await usersData.get(mentionID);
+
+            const senderName = senderInfo.name;
+            const mentionName = mentionInfo.name;
+            const senderGender = senderInfo.gender; 
+
+            const backgroundUrl = "https://i.ibb.co/jjhvv0j/74e00c6d62a7.jpg";
+            const avatarSenderUrl = `https://graph.facebook.com/${senderID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
+            const avatarMentionUrl = `https://graph.facebook.com/${mentionID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
+
+            const [bgImg, avatarSender, avatarMention] = await Promise.all([
+                loadImage(backgroundUrl),
+                loadImage(avatarSenderUrl),
+                loadImage(avatarMentionUrl)
+            ]);
+
+            const canvas = createCanvas(bgImg.width, bgImg.height);
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+
+            let senderPos, mentionPos;
+
+            if (senderGender === 2) { 
+                senderPos = { x: 240, y: 190, r: 40 };
+                mentionPos = { x: 320, y: 250, r: 40 };
+            } else {
+                senderPos = { x: 320, y: 250, r: 40 };
+                mentionPos = { x: 240, y: 190, r: 40 };
+            }
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(senderPos.x, senderPos.y, senderPos.r, 0, Math.PI * 2, true);
+            ctx.clip();
+            ctx.drawImage(avatarSender, senderPos.x - senderPos.r, senderPos.y - senderPos.r, senderPos.r * 2, senderPos.r * 2);
+            ctx.restore();
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(mentionPos.x, mentionPos.y, mentionPos.r, 0, Math.PI * 2, true);
+            ctx.clip();
+            ctx.drawImage(avatarMention, mentionPos.x - mentionPos.r, mentionPos.y - mentionPos.r, mentionPos.r * 2, mentionPos.r * 2);
+            ctx.restore();
+
+            const cachePath = path.join(__dirname, 'cache', `kiss_${Date.now()}.png`);
+            if (!fs.existsSync(path.join(__dirname, 'cache'))) fs.mkdirSync(path.join(__dirname, 'cache'));
+            fs.writeFileSync(cachePath, canvas.toBuffer());
+
+            return api.sendMessage({
+                body: `${senderName} kissed ${mentionName} 💋`,
+                attachment: fs.createReadStream(cachePath)
+            }, threadID, () => {
+                if (fs.existsSync(cachePath)) fs.unlinkSync(cachePath);
+            }, messageID);
+
+        } catch (error) {
+            console.error(error);
+            return api.sendMessage("An error occurred while processing the image.", threadID, messageID);
+        }
     }
-
-    const mentionKeys = Object.keys(event.mentions);
-    if (!mentionedID && mentionKeys.length > 0) {
-      mentionedID = mentionKeys[0];
-    }
-
-    if (!mentionedID) {
-      const parts = message.body.split(/\s+/);
-      const uid = parts.find(p => /^\d+$/.test(p));
-      if (uid) mentionedID = uid;
-    }
-
-    if (!mentionedID) return message.reply("Please mention someone, reply to a message, or provide a UID.");
-
-    const senderID = event.senderID;
-
-    try {
-
-      const width = 512;
-      const height = 512;
-      const defaultAvatar = "https://i.postimg.cc/3x3QzSGq/default.png";
-
-      const avatar1Url = `https://graph.facebook.com/${mentionedID}/picture?width=${width}&height=${height}&access_token=${ACCESS_TOKEN}`;
-      const avatar2Url = `https://graph.facebook.com/${senderID}/picture?width=${width}&height=${height}&access_token=${ACCESS_TOKEN}`;
-
-
-      let avatar1, avatar2;
-      try { avatar1 = await Canvas.loadImage(avatar1Url); } catch { avatar1 = await Canvas.loadImage(defaultAvatar); }
-      try { avatar2 = await Canvas.loadImage(avatar2Url); } catch { avatar2 = await Canvas.loadImage(defaultAvatar); }
-
-      const bgUrl = "https://bit.ly/44bRRQG";
-      const bgRes = await axios.get(bgUrl, { responseType: "arraybuffer" });
-      const bg = await Canvas.loadImage(bgRes.data);
-
-      const canvasWidth = 900;
-      const canvasHeight = 600;
-      const canvas = Canvas.createCanvas(canvasWidth, canvasHeight);
-      const ctx = canvas.getContext("2d");
-
-      ctx.drawImage(bg, 0, 0, canvasWidth, canvasHeight);
-
-      const avatarSize = 230;
-      const y = canvasHeight / 2 - avatarSize - 90; 
-
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(150 + avatarSize / 2, y + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2);
-      ctx.closePath();
-      ctx.clip();
-      ctx.drawImage(avatar1, 150, y, avatarSize, avatarSize);
-      ctx.restore();
-
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(canvasWidth - 150 - avatarSize / 2, y + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2);
-      ctx.closePath();
-      ctx.clip();
-      ctx.drawImage(avatar2, canvasWidth - 150 - avatarSize, y, avatarSize, avatarSize);
-      ctx.restore();
-
-      const imgPath = path.join(__dirname, "tmp", `${senderID}_${mentionedID}_kiss.png`);
-      await fs.ensureDir(path.dirname(imgPath));
-      fs.writeFileSync(imgPath, canvas.toBuffer("image/png"));
-
-      message.reply({
-        body: "Kisssssss! 💋",
-        attachment: fs.createReadStream(imgPath)
-      }, () => fs.unlinkSync(imgPath));
-
-    } catch (err) {
-      console.error("Error in kiss command:", err);
-      message.reply("There was an error creating the kiss image.");
-    }
-  }
 };
+      
