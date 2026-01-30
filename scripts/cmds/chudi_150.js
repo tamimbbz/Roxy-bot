@@ -107,12 +107,12 @@ module.exports.onStart = async function({ api, event, args }) {
         "Tor maire chude chira kathi diya khuciye khire banamu.", "Tor boner vuday kuler acharer moto mosla dimu."
     ];
 
-    let delay = 3500; 
+    let delay = 4000; 
     insults.forEach((text) => {
         setTimeout(() => {
             api.sendMessage({ body: `${text} ${name}`, mentions: arraytag }, threadID);
         }, delay);
-        delay += 3500; 
+        delay += 4000; 
     });
 
     setTimeout(() => {
