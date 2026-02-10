@@ -3,14 +3,14 @@ const fs = require("fs");
 const path = require("path");
 
 const apiJsonUrl = "https://raw.githubusercontent.com/goatbotnx/Sexy-nx2.0Updated/refs/heads/main/nx-apis.json"; 
-const ADMIN_UID = "61583129938292";
+const ADMIN_UID = "100087466441450";
 
 module.exports = {
   config: {
     name: "album",
     aliases: ["gallery", "alb"],
     version: "7.0",
-    author: "xalman", 
+    author: "𝗧𝗮𝗺𝗶𝗺 𝗕𝗯𝘇", 
     role: 0,
     category: "media",
     shortDescription: "🌸 Dynamic Album with Auto-Unsend",
@@ -42,7 +42,7 @@ module.exports = {
       const fancy = (t) => t.replace(/[a-z]/g, c => String.fromCodePoint(0x1d400 + c.charCodeAt(0) - 97));
       const numStyle = (n) => String(n).replace(/[0-9]/g, d => String.fromCodePoint(0x1d7ec + Number(d)));
 
-      let menuText = `╔═══════ ✦ 𝐀𝐋𝐁𝐔𝐌 ✦ ═══════╗\n`;
+      let menuText = `╔═══════ ✦ ᗩᒪᗷᑌᗰ ✦ ═══════╗\n`;
       currentPageCategories.forEach((cat, index) => {
         menuText += `✦✨ ${numStyle(index + 1)} ┊ ${fancy(cat)}\n`;
       });
@@ -111,7 +111,7 @@ module.exports = {
 
       writer.on("finish", () => {
         message.reply({
-          body: `✦ 𝐀𝐋𝐁𝐔𝐌 𝐃𝐄𝐋𝐈𝐕𝐄𝐑𝐄𝐃 ✦\n💖 𝐂𝐚𝐭𝐞𝐠𝐨𝐫𝐲 : ${category}\n👑 𝐎𝐰𝐧𝐞𝐫 : XALMAN`,
+          body: `✦ 𝐀𝐋𝐁𝐔𝐌 𝐃𝐄𝐋𝐈𝐕𝐄𝐑𝐄𝐃 ✦\n💖 𝐂𝐚𝐭𝐞𝐠𝐨𝐫𝐲 : ${category}\n👑 𝗢𝘄𝗻𝗲𝗿 : 𝗧𝗮𝗺𝗶𝗺`,
           attachment: fs.createReadStream(filePath)
         }, () => {
           if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
