@@ -4,7 +4,7 @@ module.exports = {
   config: {
     name: "alldl",
     version: "10.0",
-    author: "xalman",
+    author: "𝗧𝗮𝗺𝗶𝗺 𝗕𝗯𝘇",
     countDown: 3,
     role: 0,
     shortDescription: "Ultra Fast Multi-Source Downloader",
@@ -93,7 +93,7 @@ module.exports = {
       const xalmanBody = 
         `『 𝗗𝗢𝗪𝗡𝗟𝗢𝗔𝗗𝗘𝗥 』\n` +
         `━━━━━━━━━━━━━━━━━━\n` +
-        `📝 𝗧𝗶𝘁𝗹𝗲: ${title || "No Title"}\n` +
+        `📝 𝗧𝗶𝘁𝗹𝗲: ${title || "𝗡𝗼 𝗧𝗶𝘁𝗲𝗹"}\n` +
         `🌐 𝗣𝗹𝗮𝘁𝗳𝗼𝗿𝗺: ${source.toUpperCase()}\n` +
         `⏱️ 𝗧𝗶𝗺𝗲: ${time}s\n` +
         `👨‍💻 Dev: xalman` +
@@ -104,11 +104,11 @@ module.exports = {
         attachment: stream.data
       });
 
-      if (api.setMessageReaction) api.setMessageReaction("✅", messageID, () => {}, true);
+      if (api.setMessageReaction) api.setMessageReaction("☑️", messageID, () => {}, true);
 
     } catch (e) {
       console.error("Download Error:", e.message);
-      if (api.setMessageReaction) api.setMessageReaction("❌", messageID, () => {}, true);
+      if (api.setMessageReaction) api.setMessageReaction("❗", messageID, () => {}, true);
     }
   }
 };
