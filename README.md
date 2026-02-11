@@ -39,7 +39,7 @@
 ---
 
 ## 🛠️ Installation Guide
-1. **Clone the project:** `git clone https://github.com/goatbotnx/GOAT-BOT-V2.git`
+1. **Clone the project:** `https://github.com/goatbotv420-create/goat-bot-v2.git`
 2. **Install dependencies:** `npm install`
 3. **Launch the bot:** `node index.js`
 
