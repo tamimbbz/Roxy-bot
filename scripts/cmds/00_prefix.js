@@ -15,7 +15,7 @@ module.exports = {
 	config: {
 		name: "prefix",
 		version: "2.2",
-		author: "xalman",
+		author: "𝗧𝗮𝗺𝗶𝗺 𝗕𝗯𝘇",
 		countDown: 5,
 		role: 0,
 		description: "Change & show bot prefix ",
@@ -124,7 +124,7 @@ module.exports = {
 ┃ 📅 Date   : ${date}
 ┃ 👑 Owner  : ${owner}
 ┃ ⚡ Status : ONLINE
-╰━━━〔 ✨ Powered by Xalman 〕━━━╯`,
+╰━━━〔 ✨ 𝗣𝗼𝘄𝗲𝗿𝗲𝗱 𝗯𝘆 𝗧𝗮𝗺𝗶𝗺 𝗕𝗯𝘇 〕━━━╯`,
 			attachment: await getStreamFromURL(gif)
 		});
 	}
