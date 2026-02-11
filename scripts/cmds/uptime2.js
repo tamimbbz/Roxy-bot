@@ -6,7 +6,7 @@ module.exports = {
     name: 'uptime2',
     aliases: ['upt2', 'up2'],
     version: '1.6',
-    author: 'xalman', /*create by siyuu full fixed and modified by xalman*/
+    author: '𝗧𝗮𝗺𝗶𝗺 𝗕𝗯𝘇', /*create by siyuu full fixed and modified by 𝘁𝗮𝗺𝗶𝗺*/
     countDown: 15,
     role: 0,
     shortDescription: 'Display bot uptime',
@@ -22,7 +22,7 @@ module.exports = {
   },
   onStart: async function ({ message, event, usersData, threadsData, api }) {
 
-    if (this.config.author !== 'xalman') {
+    if (this.config.author !== '𝗧𝗮𝗺𝗶𝗺 𝗕𝗯𝘇') {
       return message.reply("⚠ Unauthorized author change detected. Command execution stopped.");
     }
 
@@ -56,7 +56,7 @@ module.exports = {
       const nodeVersion = process.version;
       const botPing = Date.now() - startTime;   
       const mediaBan = await threadsData.get(event.threadID, 'mediaBan') || false;
-      const mediaStatus = mediaBan ? '🚫 Restricted' : '✅ Active';
+      const mediaStatus = mediaBan ? '🚫 Restricted' : '✅ 𝗔𝗰𝘁𝗶𝘃𝗲';
       const editSegments = [
         `╭─❒ ${bold("SYSTEM UPTIME")}\n│ 🕒 ${days}d ${hours}h ${minutes}m ${seconds}s\n╰───────────────❒`,
         `╭─❒ ${bold("RESOURCE USAGE")}\n│ 📟 RAM: [${ramBar}] ${memPercentage}%\n│ 📥 ${usedMemoryGB}GB / ${totalMemoryGB}GB\n│ 🛡️ CPU: ${cpuModel}\n│ ⚡ Load: ${cpuUsage[0].toFixed(2)}%\n╰───────────────❒`,
