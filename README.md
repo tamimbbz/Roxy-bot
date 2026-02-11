@@ -1,7 +1,7 @@
 <p align="center">
   <img src="https://files.catbox.moe/lcql4o.jpg" width="100" height="100" style="border-radius: 50%; border: 3px solid #7000ff;" alt="𝗧𝗮𝗺𝗶𝗺 𝗕𝗯𝘇">
   <br>
-  <a href="https://www.facebook.com/nx210.2.0" target="_blank">
+  <a href="https://www.facebook.com/share/1CBsddcWZh/" target="_blank">
     <img src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white" />
   </a>
   <a href="https://wa.me/8801876118312" target="_blank">
